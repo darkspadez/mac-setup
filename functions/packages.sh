@@ -137,7 +137,15 @@ install_native_apps() {
     if [[ ! -d "/Applications/Synergy.app" ]]; then
         log "Downloading Synergy..."
         if [[ "$DRY_RUN" == false ]]; then
-            local synergy_url="https://symless.com/synergy/download/package/synergy-personal-v3/macos-12.0/synergy-3.3.1-macos-arm64.dmg"
+            # Detect architecture and use appropriate download URL
+            local synergy_url
+            if is_apple_silicon; then
+                synergy_url="https://symless.com/synergy/download/package/synergy-personal-v3/macos-12.0/synergy-3.3.1-macos-arm64.dmg"
+                log "Downloading Synergy for Apple Silicon (arm64)..."
+            else
+                synergy_url="https://symless.com/synergy/download/package/synergy-personal-v3/macos-12.0/synergy-3.3.1-macos-x64.dmg"
+                log "Downloading Synergy for Intel (x86_64)..."
+            fi
             curl -L "$synergy_url" -o /tmp/synergy.dmg
             
             # Mount the DMG

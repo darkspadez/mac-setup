@@ -16,11 +16,15 @@ A comprehensive automation script for setting up a fresh macOS installation with
 
 - macOS 15.x or later (tested on macOS Sequoia 15.1+)
 - Compatible with newer macOS versions including beta releases
+- **Apple Silicon (M1/M2/M3/M4) recommended** - Script is optimized for arm64 architecture
+- Intel Macs supported with limited functionality
 - Administrator privileges
 - Internet connection
 - Apple ID (for Mac App Store apps)
 
 > **Note for Beta Users**: While this script is designed to work with the latest macOS beta versions (including macOS 26.x), some settings may behave differently on untested versions. The script includes robust error handling to gracefully handle incompatibilities.
+
+> **Note for Intel Mac Users**: This script is optimized for Apple Silicon Macs. While it will work on Intel Macs, some features and performance optimizations are specific to arm64 architecture. The script will display a warning if run on Intel hardware.
 
 ## Quick Start
 
@@ -75,6 +79,9 @@ Available components:
 ## What Gets Installed
 
 ### System Configuration
+- ✅ Automatic architecture detection (Apple Silicon vs Intel)
+- ✅ Rosetta 2 installation on Apple Silicon for x86_64 compatibility
+- ✅ Architecture-specific native app downloads
 - ✅ iCloud Drive for Desktop & Documents
 - ✅ Hidden files visible in Finder
 - ✅ File extensions shown
@@ -82,6 +89,8 @@ Available components:
 - ✅ Disabled desktop widgets
 
 ### Development Tools
+- **Architecture Support**: Automatic detection and optimization for Apple Silicon (arm64) and Intel (x86_64)
+- **Rosetta 2**: Automatically installed on Apple Silicon for x86_64 compatibility
 - **Languages**: Node.js, Bun, PHP 8.4, Go, Rust, PowerShell
 - **Version Control**: Git, GitHub CLI, GitHub, GitKraken, Chezmoi, LazyGit
 - **Cloud Tools**: AWS CLI, Vultr CLI, DigitalOcean CLI (doctl), Google Cloud CLI, Azure CLI, Oracle Cloud CLI, Linode CLI, Cloudflare CLI
@@ -286,6 +295,58 @@ sdkmanager --licenses
 ### 9. Restart Your Mac
 Some settings require a restart to take full effect.
 
+## Apple Silicon & Rosetta 2 Support
+
+### Architecture Detection
+
+The script automatically detects your Mac's architecture (Apple Silicon or Intel) and optimizes the installation accordingly.
+
+**On Apple Silicon Macs (M1/M2/M3/M4):**
+- ✅ Automatic Rosetta 2 installation for x86_64 compatibility
+- ✅ Native arm64 binaries for optimal performance
+- ✅ Architecture-specific app downloads (Synergy, etc.)
+- ✅ Homebrew configured for arm64 (`/opt/homebrew`)
+
+**On Intel Macs:**
+- ⚠️ Warning displayed (script optimized for Apple Silicon)
+- ✅ x86_64 binaries used throughout
+- ✅ Homebrew configured for x86_64 (`/usr/local`)
+- ❌ Rosetta 2 installation skipped (not needed)
+
+### Rosetta 2 Installation
+
+**What is Rosetta 2?**
+Rosetta 2 is Apple's translation layer that allows x86_64 (Intel) applications to run on Apple Silicon Macs. It's automatically installed by this script on Apple Silicon to ensure maximum compatibility with legacy software.
+
+**Installation Process:**
+1. Detected during Xcode Command Line Tools installation
+2. Installed silently with automatic license agreement
+3. Takes 1-3 minutes depending on internet speed
+4. No user interaction required
+
+**Manual Installation (if needed):**
+```bash
+softwareupdate --install-rosetta --agree-to-license
+```
+
+**Verification:**
+```bash
+# Check if Rosetta 2 is installed
+arch -x86_64 /usr/bin/true && echo "Rosetta 2 is installed" || echo "Rosetta 2 is not installed"
+```
+
+### Architecture-Specific Features
+
+The script intelligently handles architecture differences:
+
+| Feature | Apple Silicon | Intel |
+|---------|---------------|-------|
+| Homebrew Location | `/opt/homebrew` | `/usr/local` |
+| Rosetta 2 | Auto-installed | Not needed |
+| Native Apps | arm64 versions | x86_64 versions |
+| Performance | Optimized | Standard |
+| Docker Containers | Can run both arm64 & x86_64 | x86_64 only |
+
 ## Customization
 
 ### Modifying Package Lists
@@ -314,14 +375,54 @@ Modify `functions/macos-settings.sh` to adjust macOS configurations.
 - Check internet connection
 - Review the log file in `logs/` directory
 
+### Architecture Detection Issues
+```bash
+# Check your Mac's architecture
+uname -m
+# Output: arm64 (Apple Silicon) or x86_64 (Intel)
+
+# Verify the script detects it correctly
+./setup-mac.sh --dry-run
+```
+
+### Rosetta 2 Installation Fails
+If Rosetta 2 installation fails on Apple Silicon:
+```bash
+# Try manual installation
+softwareupdate --install-rosetta --agree-to-license
+
+# If that fails, try the interactive version
+softwareupdate --install-rosetta
+
+# Verify installation
+arch -x86_64 /usr/bin/true && echo "Success" || echo "Failed"
+```
+
+**Note:** The script will continue even if Rosetta 2 installation fails. You can install it manually later if needed.
+
 ### Homebrew Installation Issues
 ```bash
 # Manually install Homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
+# For Apple Silicon, add to PATH
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# For Intel
+echo 'eval "$(/usr/local/bin/brew shellenv)"' >> ~/.zprofile
+eval "$(/usr/local/bin/brew shellenv)"
+
 # Then re-run specific components
 ./setup-mac.sh --only brew-packages
 ```
+
+### Intel Mac Performance
+If running on an Intel Mac:
+- The warning about optimization for Apple Silicon is informational
+- All core functionality will still work
+- Some apps may have better performance on Apple Silicon
+- Consider the script will continue without issues
 
 ### Raycast Not Replacing Spotlight
 1. Open System Settings → Keyboard → Keyboard Shortcuts

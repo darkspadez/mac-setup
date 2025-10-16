@@ -75,6 +75,16 @@ command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
+# Get system architecture
+get_architecture() {
+    uname -m
+}
+
+# Check if running on Apple Silicon
+is_apple_silicon() {
+    [[ "$(get_architecture)" == "arm64" ]]
+}
+
 # Check if a package is installed via Homebrew
 brew_installed() {
     if command_exists brew; then
@@ -143,6 +153,24 @@ check_internet() {
     else
         error "No internet connection. Please check your network settings."
         exit 1
+    fi
+}
+
+# Check and log system architecture
+check_system_architecture() {
+    local arch
+    arch=$(get_architecture)
+    
+    log "System Architecture: $arch"
+    
+    if is_apple_silicon; then
+        success "Running on Apple Silicon (arm64)"
+        info "This script is optimized for Apple Silicon Macs"
+    else
+        warning "Running on Intel (x86_64)"
+        warning "This script is optimized for Apple Silicon Macs"
+        warning "Some features may work differently on Intel hardware"
+        info "The script will continue, but Apple Silicon is recommended for best results"
     fi
 }
 
@@ -219,6 +247,7 @@ main() {
     
     # Prerequisites
     check_macos_version
+    check_system_architecture
     check_admin_privileges
     check_internet
     
