@@ -136,6 +136,39 @@ configure_macos_settings() {
     safe_defaults com.apple.screencapture disable-shadow bool true
     
     ###################
+    # Trackpad Settings
+    ###################
+    log "Configuring trackpad settings..."
+    
+    # Enable tap to click for this user and for the login screen
+    safe_defaults com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking bool true
+    safe_defaults NSGlobalDomain com.apple.mouse.tapBehavior int 1
+    
+    # Disable two-finger secondary click (only use corner click)
+    safe_defaults com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadRightClick bool false
+    safe_defaults com.apple.AppleMultitouchTrackpad TrackpadRightClick bool false
+    
+    # Set trackpad corner clicking: bottom right = right click
+    # TrackpadCornerSecondaryClick: 0 = off, 1 = bottom right, 2 = bottom left
+    safe_defaults com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadCornerSecondaryClick int 1
+    safe_defaults com.apple.AppleMultitouchTrackpad TrackpadCornerSecondaryClick int 1
+    
+    # Disable three finger drag (basic trackpad mode)
+    safe_defaults com.apple.driver.AppleBluetoothMultitouch.trackpad TrackpadThreeFingerDrag bool false
+    safe_defaults com.apple.AppleMultitouchTrackpad TrackpadThreeFingerDrag bool false
+    
+    # Set tracking speed (0 = slow, 3 = fast)
+    safe_defaults NSGlobalDomain com.apple.trackpad.scaling float 1
+    
+    # Disable force click and haptic feedback (basic mode)
+    safe_defaults NSGlobalDomain com.apple.trackpad.forceClick bool false
+    safe_defaults com.apple.AppleMultitouchTrackpad ActuateDetents bool false
+    safe_defaults com.apple.AppleMultitouchTrackpad ForceSuppressed bool true
+    
+    # Enable natural scrolling (swipe up = content moves up, like on phone)
+    safe_defaults NSGlobalDomain com.apple.swipescrolldirection bool true
+    
+    ###################
     # General UI/UX
     ###################
     log "Configuring general UI/UX settings..."
@@ -150,6 +183,46 @@ configure_macos_settings() {
     
     # Disable the "Are you sure you want to open this application?" dialog
     safe_defaults com.apple.LaunchServices LSQuarantine bool false
+    
+    # Allow apps downloaded from anywhere (disables Gatekeeper for unidentified developers)
+    log "Disabling Gatekeeper to allow apps from anywhere..."
+    sudo spctl --master-disable 2>/dev/null || warning "Failed to disable Gatekeeper (may require manual sudo access)"
+    
+    # Disable quarantine attribute on downloaded files (removes 'downloaded from internet' warnings)
+    safe_defaults com.apple.LaunchServices LSQuarantine bool false
+    
+    # Reduce security dialog frequency for opening apps
+    safe_defaults com.apple.security.GKAutoRearm bool false || true
+    
+    ###################
+    # Kernel Extensions (KEXTs)
+    ###################
+    log "Configuring kernel extension settings..."
+    
+    # Note: Apple Silicon Macs (M1/M2/M3) require user approval for kernel extensions in Recovery Mode
+    # Intel Macs can have reduced security for KEXTs, but it still requires user interaction
+    
+    # Reduce kernel extension blocking (requires SIP disabled on Apple Silicon)
+    # This setting is primarily for Intel Macs and may not work on Apple Silicon
+    sudo spctl --kext-consent 2>/dev/null || true
+    
+    # Inform user about manual steps needed for kernel extensions
+    info "──────────────────────────────────────────────────────────────"
+    info "KERNEL EXTENSION NOTICE:"
+    info "Some Homebrew apps require kernel extensions (KEXTs)."
+    info ""
+    info "On Intel Macs:"
+    info "  • Go to System Settings > Privacy & Security"
+    info "  • When apps request kernel extensions, click 'Allow'"
+    info "  • You may need to restart after allowing KEXTs"
+    info ""
+    info "On Apple Silicon Macs (M1/M2/M3):"
+    info "  • Restart your Mac into Recovery Mode (hold power button)"
+    info "  • Go to Utilities > Startup Security Utility"
+    info "  • Select your boot disk and click Security Policy"
+    info "  • Choose 'Reduced Security' and enable 'Allow kernel extensions'"
+    info "  • Restart and approve any kernel extension prompts in System Settings"
+    info "──────────────────────────────────────────────────────────────"
     
     # Enable full keyboard access for all controls
     safe_defaults NSGlobalDomain AppleKeyboardUIMode int 3
