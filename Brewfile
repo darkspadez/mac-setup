@@ -2,37 +2,34 @@
 # Install with: brew bundle install
 
 # Taps
-tap "homebrew/cask-fonts"
-tap "oven-sh/bun"
 
 # Programming Languages
 brew "node"
-brew "bun"
+brew "oven-sh/bun/bun"
 brew "php@8.4"
 brew "go"
 brew "rust"
-brew "powershell"
+cask "powershell"
 
 # Development Tools
 brew "git"
 brew "gh"
-brew "github"
+cask "github"
 brew "chezmoi"
 brew "lazygit"
 brew "awscli"
 brew "vultr"
 brew "doctl"
-brew "gcloud-cli"
+cask "gcloud-cli"
 brew "azure-cli"
 brew "oci-cli"
 brew "linode-cli"
-brew "cloudflare-cli"
-brew "1password-cli"
+brew "cloudflare-cli4"
+cask "1password-cli"
 
 # Infrastructure as Code & Configuration Management
-brew "terraform"
+brew "opentofu"
 brew "ansible"
-brew "packer"
 
 # Kubernetes Tools
 brew "kubectl"
@@ -59,16 +56,16 @@ brew "wget"
 brew "shellcheck"
 brew "shfmt"
 brew "uv"
-brew "rar"
+cask "rar"
 
 # Mac App Store CLI
 brew "mas"
 
 # Android Development
-brew "android-commandlinetools"
+cask "android-commandlinetools"
 
 # Java Runtime
-brew "temurin"
+cask "temurin"
 
 # Cask Applications
 cask "warp"
@@ -83,9 +80,9 @@ cask "discord"
 cask "the-unarchiver"
 cask "gitkraken"
 cask "proton-mail"
-cask "proton-vpn"
+cask "protonvpn"
 cask "filen"
-cask "shotrr"
+cask "shottr"
 cask "insomnia"
 cask "google-chrome"
 cask "slack"
@@ -112,6 +109,6 @@ mas "Infuse 7", id: 1136220934
 mas "Magnet", id: 441258766
 mas "Unsplash Wallpapers", id: 1284863847
 mas "HP Print and Support", id: 1474276998
-mas "UHF Love Your IPTV", id: 6443751726
+mas "UHF - Love Your IPTV", id: 6443751726
 mas "Amphetamine", id: 937984704
 mas "Paste - Limitless Clipboard", id: 967805235

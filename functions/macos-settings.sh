@@ -192,7 +192,7 @@ configure_macos_settings() {
     safe_defaults com.apple.LaunchServices LSQuarantine bool false
     
     # Reduce security dialog frequency for opening apps
-    safe_defaults com.apple.security.GKAutoRearm bool false || true
+    safe_defaults com.apple.security GKAutoRearm bool false || true
     
     ###################
     # Kernel Extensions (KEXTs)
