@@ -65,7 +65,7 @@ Available components:
 - `settings` - macOS system preferences
 - `mas` - Mac App Store apps
 - `brew-packages` - Homebrew packages and casks
-- `native-apps` - Native applications (Perplexity, Chrome)
+- `native-apps` - Native applications (Perplexity, Chrome, boringNotch, Synergy)
 - `shell` - Shell environment (Oh-My-Zsh, Powerlevel10k)
 - `dotfiles` - Configuration files (.zshrc, .gitconfig)
 - `bun-packages` - Bun global packages
@@ -82,11 +82,19 @@ Available components:
 - ✅ Disabled desktop widgets
 
 ### Development Tools
-- **Languages**: Node.js, Bun, PHP 8.4, Go, Rust
-- **Version Control**: Git, GitHub CLI, GitKraken, Chezmoi
+- **Languages**: Node.js, Bun, PHP 8.4, Go, Rust, PowerShell
+- **Version Control**: Git, GitHub CLI, GitHub, GitKraken, Chezmoi, LazyGit
+- **Cloud Tools**: AWS CLI, Vultr CLI, DigitalOcean CLI (doctl), Google Cloud CLI, Azure CLI, Oracle Cloud CLI, Linode CLI, Cloudflare CLI
+- **Infrastructure as Code**: Terraform, Ansible, Packer
+- **Kubernetes**: kubectl, Helm, k9s
+- **Security**: 1Password CLI, Trivy, Grype
+- **CI/CD**: act (GitHub Actions locally)
 - **Editors**: VS Code Insiders, Claude
 - **Containers**: Docker
-- **API Testing**: Postman
+- **API Testing**: Insomnia
+- **Database Tools**: Beekeeper Studio, DataGrip
+- **Mobile Development**: Android Command Line Tools
+- **Java Runtime**: Temurin (Eclipse Temurin JDK)
 
 ### Terminal & Shell
 - **Terminal**: Warp (replaces default Terminal)
@@ -98,6 +106,7 @@ Available components:
   - `fd` → replaces `find`
   - `ripgrep` → replaces `grep`
   - `fzf` → fuzzy finder
+  - `rar` → archive utility
 
 ### Productivity Apps
 - **Launcher**: Raycast (replaces Spotlight)
@@ -106,20 +115,28 @@ Available components:
 - **Email**: Proton Mail
 - **Cloud Storage**: Filen
 - **Screenshot**: Shotrr
-- **Communication**: Discord
+- **Communication**: Discord, Slack
+- **Remote Desktop**: Parsec
+- **Keyboard & Mouse Sharing**: Synergy
+- **Utilities**: Raspberry Pi Imager, Elgato Camera Hub, OrcaSlicer, AppLite, Ice (Beta), AppCleaner, DockDoor
 
 ### Mac App Store Apps
 - Infuse 7 - Media player
 - Magnet - Window management
 - Unsplash Wallpapers - Dynamic wallpapers
+- HP Print and Support - HP printer support
+- UHF Love Your IPTV - IPTV player
+- Amphetamine - Keep your Mac awake
+- Paste - Limitless Clipboard - Clipboard manager
 
 ### Browsers
 - Perplexity Comet (set as default)
 - Google Chrome
 
 ### Fonts
-- Fira Code
-- JetBrains Mono
+- Fira Code Nerd Font
+- JetBrains Mono Nerd Font
+- Meslo LG Nerd Font
 
 ### Bun Global Packages
 - `@cloudflare/claude-code` - Claude CLI
@@ -158,15 +175,26 @@ gco   # git checkout
 gb    # git branch
 gp    # git push
 gl    # git log (formatted)
+lg    # lazygit (terminal UI for git)
 ```
 
-### Docker Shortcuts
+### Docker & Kubernetes Shortcuts
 ```bash
+# Docker
 dps   # docker ps
 dpsa  # docker ps -a
 di    # docker images
 dex   # docker exec -it
 dlog  # docker logs -f
+
+# Kubernetes
+k     # kubectl
+kgp   # kubectl get pods
+kgs   # kubectl get services
+kgd   # kubectl get deployments
+kdp   # kubectl describe pod
+kl    # kubectl logs -f
+k9s   # Kubernetes terminal UI
 ```
 
 ## Post-Installation Steps
@@ -179,7 +207,10 @@ After running the script, complete these manual steps:
 - Proton Mail & VPN
 - Discord
 - Filen
-- Postman
+- Insomnia
+- Slack
+- Synergy (for keyboard and mouse sharing setup)
+- Cloud providers (AWS, Azure, Google Cloud, DigitalOcean, Vultr, Oracle Cloud, Linode, Cloudflare)
 
 ### 2. Configure Raycast
 - Open Raycast preferences
@@ -187,23 +218,72 @@ After running the script, complete these manual steps:
 - Import your settings/extensions
 - Configure workflows
 
-### 3. VS Code Insiders Setup
+### 3. IDE Setup
+**VS Code Insiders:**
 - Sign in with GitHub for settings sync
 - Install your preferred extensions
 
-### 4. Generate SSH Keys
+**DataGrip:**
+- Activate license or start trial
+- Connect to your databases
+- Import data sources if migrating
+
+### 4. Configure Cloud & Infrastructure Tools
+```bash
+# Cloud Provider CLIs
+aws configure              # AWS
+az login                   # Azure
+gcloud init                # Google Cloud
+doctl auth init            # DigitalOcean
+vultr-cli configure        # Vultr
+oci setup config           # Oracle Cloud
+linode-cli configure       # Linode
+cloudflare-cli login       # Cloudflare
+
+# Security & Password Management
+op signin                  # 1Password
+
+# Kubernetes
+kubectl config view        # View kubectl configuration
+helm repo add stable https://charts.helm.sh/stable  # Add Helm repo
+
+# Infrastructure as Code
+terraform init             # Initialize Terraform (in project directory)
+ansible --version          # Verify Ansible installation
+```
+
+### 5. Generate SSH Keys
 ```bash
 ssh-keygen -t ed25519 -C "your.email@example.com"
 ```
 
-### 5. Update Git Configuration
+### 6. Update Git Configuration
 Edit `~/.gitconfig` with your information:
 ```bash
 git config --global user.name "Your Name"
 git config --global user.email "your.email@example.com"
 ```
 
-### 6. Restart Your Mac
+### 7. Security & Vulnerability Scanning
+```bash
+# Scan container images for vulnerabilities
+trivy image <image-name>
+
+# Scan for vulnerabilities with Grype
+grype <image-name>
+
+# Run GitHub Actions locally
+act --list              # List available actions
+act pull_request       # Run PR workflow
+```
+
+### 8. Configure Android Development (Optional)
+```bash
+# Accept Android SDK licenses
+sdkmanager --licenses
+```
+
+### 9. Restart Your Mac
 Some settings require a restart to take full effect.
 
 ## Customization

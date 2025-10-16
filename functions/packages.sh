@@ -99,6 +99,72 @@ install_native_apps() {
     else
         success "Perplexity Comet Browser already installed"
     fi
+    
+    # boringNotch - macOS notch utility
+    if [[ ! -d "/Applications/boringNotch.app" ]]; then
+        log "Downloading boringNotch..."
+        if [[ "$DRY_RUN" == false ]]; then
+            local boring_url="https://github.com/TheBoredTeam/boring.notch/releases/latest/download/boringNotch.dmg"
+            curl -L "$boring_url" -o /tmp/boringNotch.dmg
+            
+            # Mount the DMG
+            hdiutil attach /tmp/boringNotch.dmg -nobrowse -quiet
+            
+            # Find the mounted volume
+            local volume_path
+            volume_path=$(find /Volumes -maxdepth 1 -name "*boring*" -o -name "*Notch*" -type d | head -n 1)
+            
+            if [[ -n "$volume_path" ]]; then
+                # Copy the app to Applications
+                cp -R "$volume_path"/*.app /Applications/ 2>/dev/null || cp -R "$volume_path/boringNotch.app" /Applications/
+                # Unmount the DMG
+                hdiutil detach "$volume_path" -quiet
+                rm /tmp/boringNotch.dmg
+                success "boringNotch installed"
+            else
+                error "Could not find boringNotch.app in mounted DMG"
+                rm /tmp/boringNotch.dmg
+                return 1
+            fi
+        else
+            log "[DRY-RUN] Would install boringNotch"
+        fi
+    else
+        success "boringNotch already installed"
+    fi
+    
+    # Synergy - Keyboard and mouse sharing
+    if [[ ! -d "/Applications/Synergy.app" ]]; then
+        log "Downloading Synergy..."
+        if [[ "$DRY_RUN" == false ]]; then
+            local synergy_url="https://symless.com/synergy/download/package/synergy-personal-v3/macos-12.0/synergy-3.3.1-macos-arm64.dmg"
+            curl -L "$synergy_url" -o /tmp/synergy.dmg
+            
+            # Mount the DMG
+            hdiutil attach /tmp/synergy.dmg -nobrowse -quiet
+            
+            # Find the mounted volume
+            local volume_path
+            volume_path=$(find /Volumes -maxdepth 1 -name "*Synergy*" -type d | head -n 1)
+            
+            if [[ -n "$volume_path" ]]; then
+                # Copy the app to Applications
+                cp -R "$volume_path"/*.app /Applications/ 2>/dev/null || cp -R "$volume_path/Synergy.app" /Applications/
+                # Unmount the DMG
+                hdiutil detach "$volume_path" -quiet
+                rm /tmp/synergy.dmg
+                success "Synergy installed"
+            else
+                error "Could not find Synergy.app in mounted DMG"
+                rm /tmp/synergy.dmg
+                return 1
+            fi
+        else
+            log "[DRY-RUN] Would install Synergy"
+        fi
+    else
+        success "Synergy already installed"
+    fi
 }
 
 install_bun_packages() {
