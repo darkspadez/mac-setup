@@ -125,44 +125,65 @@ install_native_apps() {
     
     # Synergy - Keyboard and mouse sharing
     if [[ ! -d "/Applications/Synergy.app" ]]; then
-        log "Downloading Synergy..."
+        log "Installing Synergy..."
         if [[ "$DRY_RUN" == false ]]; then
-            # Synergy requires authentication for downloads
-            # Prompt user to get download URL from their account
-            log "Synergy requires a download URL from your account."
-            log "Please visit: https://symless.com/synergy/downloads"
-            log "Sign in, select your architecture, and copy the download URL."
+            # Synergy requires manual download due to authentication
+            log "========================================="
+            log "Synergy Installation"
+            log "========================================="
+            log "Please download Synergy from: https://symless.com/synergy/download"
+            log ""
+            log "After downloading, the file should be in ~/Downloads/"
+            log "Example: ~/Downloads/synergy-3.3.1-macos-arm64.dmg"
             echo ""
-            read -p "Paste the Synergy download URL (or press Enter to skip): " synergy_url
+            read -p "Have you downloaded Synergy? (yes/no/skip): " synergy_choice
             
-            if [[ -z "$synergy_url" ]]; then
-                warning "Skipping Synergy installation. You can install it manually later."
-                return 0
-            fi
-            
-            log "Downloading Synergy..."
-            curl -L "$synergy_url" -o /tmp/synergy.dmg
-            
-            # Mount the DMG
-            # Mount the DMG
-            hdiutil attach /tmp/synergy.dmg -nobrowse -quiet
-            
-            # Find the mounted volume
-            local volume_path
-            volume_path=$(find /Volumes -maxdepth 1 -name "*Synergy*" -type d | head -n 1)
-            
-            if [[ -n "$volume_path" ]]; then
-                # Copy the app to Applications
-                cp -R "$volume_path"/*.app /Applications/ 2>/dev/null || cp -R "$volume_path/Synergy.app" /Applications/
-                # Unmount the DMG
-                hdiutil detach "$volume_path" -quiet
-                rm /tmp/synergy.dmg
-                success "Synergy installed"
-            else
-                error "Could not find Synergy.app in mounted DMG"
-                rm /tmp/synergy.dmg
-                return 1
-            fi
+            case "${synergy_choice,,}" in
+                yes|y)
+                    # Look for Synergy DMG in Downloads folder
+                    local synergy_dmg
+                    synergy_dmg=$(find "$HOME/Downloads" -name "synergy*.dmg" -type f | head -n 1)
+                    
+                    if [[ -z "$synergy_dmg" ]]; then
+                        error "Could not find Synergy DMG in ~/Downloads/"
+                        error "Please download it from https://symless.com/synergy/download"
+                        return 1
+                    fi
+                    
+                    log "Found Synergy DMG: $synergy_dmg"
+                    log "Installing Synergy..."
+                    
+                    # Mount the DMG
+                    hdiutil attach "$synergy_dmg" -nobrowse -quiet
+                    
+                    # Find the mounted volume
+                    local volume_path
+                    volume_path=$(find /Volumes -maxdepth 1 -name "*Synergy*" -type d | head -n 1)
+                    
+                    if [[ -n "$volume_path" ]]; then
+                        # Copy the app to Applications
+                        cp -R "$volume_path"/*.app /Applications/ 2>/dev/null || cp -R "$volume_path/Synergy.app" /Applications/
+                        # Unmount the DMG
+                        hdiutil detach "$volume_path" -quiet
+                        success "Synergy installed"
+                    else
+                        error "Could not find Synergy.app in mounted DMG"
+                        return 1
+                    fi
+                    ;;
+                no|n)
+                    error "Synergy installation cancelled. Please download it first."
+                    return 1
+                    ;;
+                skip|s|"")
+                    warning "Skipping Synergy installation. You can install it manually later."
+                    return 0
+                    ;;
+                *)
+                    error "Invalid choice. Please answer yes, no, or skip."
+                    return 1
+                    ;;
+            esac
         else
             log "[DRY-RUN] Would install Synergy"
         fi
