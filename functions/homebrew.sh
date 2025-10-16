@@ -47,15 +47,3 @@ install_homebrew() {
         exit 1
     fi
 }
-
-install_mas_cli() {
-    log "Installing Mac App Store CLI (mas)..."
-    
-    if brew_installed "mas"; then
-        success "mas already installed"
-        return 0
-    fi
-    
-    run_command "brew install mas"
-    success "mas installed successfully"
-}

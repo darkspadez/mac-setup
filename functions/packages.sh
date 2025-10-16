@@ -13,16 +13,6 @@ install_brewfile_packages() {
         return 1
     fi
     
-    # Ensure mas is installed first (needed for Mac App Store apps)
-    install_mas_cli
-    
-    # Check if signed into Mac App Store (required for mas apps)
-    if ! mas account &>/dev/null; then
-        warning "Please sign in to the Mac App Store first"
-        open -a "App Store"
-        echo "Press Enter after signing in to continue..."
-        read -r
-    fi
     
     # Install all packages from Brewfile
     log "Running brew bundle install..."

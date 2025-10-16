@@ -211,9 +211,7 @@ Usage: $0 [OPTIONS]
 OPTIONS:
     --dry-run       Run in dry-run mode (no actual changes)
     --only <list>   Run only specified components (comma-separated)
-                    Components: xcode,homebrew,settings,mas,brew-packages,
-                               native-apps,shell,dotfiles,bun-packages,
-                               app-replacements,defaults
+                    Components: xcode,homebrew,settings,brew-packages,native-apps,shell,dotfiles,bun-packages,app-replacements,defaults
     --help, -h      Show this help message
 
 Examples:
@@ -244,6 +242,10 @@ main() {
     log "======================================================"
     log "Starting Mac Setup Automation Script"
     log "======================================================"
+    
+    if [[ ${#COMPONENTS_TO_RUN[@]} -eq 0 ]]; then
+        log "Running all components."
+    fi
     
     # Prerequisites
     check_macos_version
@@ -345,9 +347,6 @@ EOF
 }
 
 # Parse arguments and run main
-parse_arguments "$@"
-main
-
 # Check if component should run
 should_run_component() {
     local component="$1"
@@ -356,8 +355,13 @@ should_run_component() {
     fi
     for c in "${COMPONENTS_TO_RUN[@]}"; do
         if [[ "$c" == "$component" ]]; then
+            log "Component '$component' is in the list to run."
             return 0
         fi
     done
+    log "Skipping component '$component'."
     return 1
 }
+
+parse_arguments "$@"
+main
