@@ -113,20 +113,20 @@ set_default_apps() {
         fi
     }
     
-    # Set VS Code Insiders as default text editor
+    # Set Zed as default text editor
     set_default_editor() {
-        log "Setting VS Code Insiders as default text editor..."
+        log "Setting Zed as default text editor..."
         
         if [[ "$DRY_RUN" == true ]]; then
-            log "[DRY-RUN] Would set VS Code Insiders as default editor"
+            log "[DRY-RUN] Would set Zed as default editor"
             return 0
         fi
         
-        # Install VS Code Insiders command line tools
-        if [[ -d "/Applications/Visual Studio Code - Insiders.app" ]]; then
-            # Create code-insiders symlink if it doesn't exist
-            if [[ ! -f "/usr/local/bin/code-insiders" ]]; then
-                ln -sf "/Applications/Visual Studio Code - Insiders.app/Contents/Resources/app/bin/code" /usr/local/bin/code-insiders
+        # Install Zed command line tools
+        if [[ -d "/Applications/Zed.app" ]]; then
+            # Create zed symlink if it doesn't exist
+            if [[ ! -f "/usr/local/bin/zed" ]]; then
+                ln -sf "/Applications/Zed.app/Contents/MacOS/cli" /usr/local/bin/zed 2>/dev/null || true
             fi
             
             # Set as default for various file types
@@ -138,12 +138,12 @@ set_default_apps() {
             )
             
             for ext in "${file_extensions[@]}"; do
-                duti -s com.microsoft.VSCodeInsiders .$ext all 2>/dev/null || true
+                duti -s dev.zed.Zed .$ext all 2>/dev/null || true
             done
             
-            success "VS Code Insiders set as default text editor"
+            success "Zed set as default text editor"
         else
-            warning "VS Code Insiders not found. Please install it first."
+            warning "Zed not found. Please install it first."
         fi
     }
     

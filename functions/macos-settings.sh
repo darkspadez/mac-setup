@@ -169,6 +169,14 @@ configure_macos_settings() {
     safe_defaults NSGlobalDomain com.apple.swipescrolldirection bool true
     
     ###################
+    # Menu Bar Settings
+    ###################
+    log "Configuring menu bar settings..."
+    
+    # Enable menu bar background (improves visibility of menu bar items)
+    safe_defaults NSGlobalDomain AppleEnableMenuBarTransparency bool false
+    
+    ###################
     # General UI/UX
     ###################
     log "Configuring general UI/UX settings..."

@@ -11,12 +11,18 @@ brew "go"
 brew "rust"
 cask "powershell"
 
+# Text Editors
+cask "zed"
+cask "visual-studio-code@insiders"
+
 # Development Tools
 brew "git"
 brew "gh"
 cask "github"
 brew "chezmoi"
 brew "lazygit"
+
+# Infrastructure & Cloud Tools
 brew "awscli"
 brew "vultr"
 brew "doctl"
@@ -72,41 +78,54 @@ cask "android-commandlinetools"
 # Java Runtime
 cask "temurin"
 
-# Cask Applications
+# Terminal & Shell
 cask "warp"
-cask "visual-studio-code@insiders"
+
+# Communication & Collaboration
 cask "claude"
-cask "raycast"
-cask "1password"
-cask "tailscale-app"
-cask "iina"
 cask "discord"
-cask "the-unarchiver"
-cask "gitkraken"
+cask "slack"
+
+# Password & Security
+cask "1password"
 cask "proton-mail"
 cask "protonvpn"
+cask "tailscale-app"
+
+# Media & Entertainment
+cask "iina"
+cask "parsec"
+
+# File Management
+cask "the-unarchiver"
 cask "filen"
+
+# Productivity
+cask "raycast"
 cask "shottr"
 cask "insomnia"
-cask "google-chrome"
-cask "slack"
-cask "parsec"
+cask "gitkraken"
 cask "raspberry-pi-imager"
 cask "elgato-camera-hub"
 cask "orcaslicer"
 cask "applite"
-cask "jordanbaird-ice@beta"
 cask "appcleaner"
 cask "dockdoor"
+
+# System Enhancement
+cask "jordanbaird-ice@beta"
+
+# Web Browsers
+cask "google-chrome"
+
+# Database Tools
+cask "beekeeper-studio"
+cask "datagrip"
 
 # Fonts
 cask "font-fira-code-nerd-font"
 cask "font-jetbrains-mono-nerd-font"
 cask "font-meslo-lg-nerd-font"
-
-# Database Tools
-cask "beekeeper-studio"
-cask "datagrip"
 
 # Mac App Store Applications
 #mas "Infuse 7", id: 1136220934
