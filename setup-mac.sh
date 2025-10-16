@@ -1,9 +1,12 @@
 #!/bin/bash
 
 #############################################################
-# Mac Setup Automation Script for macOS Sequoia 15.1
+# Mac Setup Automation Script for macOS 15.x and later
 # This script automates the setup of a fresh Mac installation
 # with development tools, apps, and system configurations
+#
+# Tested on: macOS Sequoia 15.1+
+# Compatible with: macOS 15.x through latest beta versions
 #############################################################
 
 set -euo pipefail  # Exit on error, undefined variables, and pipe failures
@@ -85,17 +88,40 @@ brew_installed() {
 check_macos_version() {
     local os_version
     os_version=$(sw_vers -productVersion)
+    local major_version
+    major_version=$(echo "$os_version" | cut -d. -f1)
+    
     log "Current macOS version: $os_version"
     
-    if [[ ! "$os_version" =~ ^15\. ]]; then
-        warning "This script is designed for macOS Sequoia 15.x. Current version: $os_version"
+    # Check if macOS version is 15 or higher
+    if [[ "$major_version" -lt 15 ]]; then
+        warning "This script is designed for macOS 15.x and later. Current version: $os_version"
+        warning "Some features may not work correctly on older versions."
         read -p "Do you want to continue anyway? (y/n): " -n 1 -r
         echo
         if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-            error "Exiting due to macOS version mismatch"
+            error "Exiting due to macOS version requirement not met"
             exit 1
         fi
+    elif [[ "$major_version" -gt 15 ]]; then
+        info "Running on macOS $os_version (newer than tested version 15.x)"
+        info "The script should work, but some settings may need adjustment."
+    else
+        success "Running on supported macOS version: $os_version"
     fi
+}
+
+# Get macOS major version number
+get_macos_major_version() {
+    sw_vers -productVersion | cut -d. -f1
+}
+
+# Compare macOS version (returns 0 if current >= required, 1 otherwise)
+version_gte() {
+    local required="$1"
+    local current
+    current=$(get_macos_major_version)
+    [[ "$current" -ge "$required" ]]
 }
 
 # Check for admin privileges

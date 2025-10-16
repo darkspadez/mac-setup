@@ -4,6 +4,21 @@
 # macOS System Settings Configuration
 #############################################################
 
+# Safe defaults write with error handling
+safe_defaults() {
+    local domain="$1"
+    local key="$2"
+    local type="$3"
+    local value="$4"
+    
+    if defaults write "$domain" "$key" "-$type" "$value" 2>/dev/null; then
+        return 0
+    else
+        warning "Failed to set $domain $key (may not be supported on this macOS version)"
+        return 1
+    fi
+}
+
 configure_macos_settings() {
     log "Configuring macOS system settings..."
     
@@ -12,7 +27,9 @@ configure_macos_settings() {
         return 0
     fi
     
-    # Close System Preferences to prevent conflicts
+    # Close System Settings/Preferences to prevent conflicts
+    # Try both names for compatibility with different macOS versions
+    osascript -e 'quit app "System Settings"' 2>/dev/null || true
     osascript -e 'quit app "System Preferences"' 2>/dev/null || true
     
     ###################
@@ -20,17 +37,17 @@ configure_macos_settings() {
     ###################
     log "Configuring iCloud Drive for Desktop & Documents..."
     # This requires user to be signed into iCloud
-    defaults write com.apple.finder FXICloudDriveEnabled -bool true
-    defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
-    defaults write com.apple.finder FXICloudDriveDesktop -bool true
-    defaults write com.apple.finder FXICloudDriveDocuments -bool true
+    safe_defaults com.apple.finder FXICloudDriveEnabled bool true
+    safe_defaults com.apple.finder FXEnableExtensionChangeWarning bool false
+    safe_defaults com.apple.finder FXICloudDriveDesktop bool true
+    safe_defaults com.apple.finder FXICloudDriveDocuments bool true
     
     ###################
     # Disable Desktop Widgets
     ###################
     log "Disabling desktop widgets..."
-    defaults write com.apple.WindowManager StandardHideWidgets -bool true
-    defaults write com.apple.WindowManager HideWidgets -bool true
+    safe_defaults com.apple.WindowManager StandardHideWidgets bool true || true
+    safe_defaults com.apple.WindowManager HideWidgets bool true || true
     
     ###################
     # Finder Settings
@@ -38,36 +55,36 @@ configure_macos_settings() {
     log "Configuring Finder settings..."
     
     # Show hidden files
-    defaults write com.apple.finder AppleShowAllFiles -bool true
+    safe_defaults com.apple.finder AppleShowAllFiles bool true
     
     # Show file extensions
-    defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+    safe_defaults NSGlobalDomain AppleShowAllExtensions bool true
     
     # Show path bar
-    defaults write com.apple.finder ShowPathbar -bool true
+    safe_defaults com.apple.finder ShowPathbar bool true
     
     # Show status bar
-    defaults write com.apple.finder ShowStatusBar -bool true
+    safe_defaults com.apple.finder ShowStatusBar bool true
     
     # Set default Finder location to home folder
-    defaults write com.apple.finder NewWindowTarget -string "PfLo"
-    defaults write com.apple.finder NewWindowTargetPath -string "file://${HOME}/"
+    safe_defaults com.apple.finder NewWindowTarget string "PfLo"
+    safe_defaults com.apple.finder NewWindowTargetPath string "file://${HOME}/"
     
     # Search current folder by default
-    defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
+    safe_defaults com.apple.finder FXDefaultSearchScope string "SCcf"
     
     # Disable warning when changing file extension
-    defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
+    safe_defaults com.apple.finder FXEnableExtensionChangeWarning bool false
     
     # Enable spring loading for directories
-    defaults write NSGlobalDomain com.apple.springing.enabled -bool true
+    safe_defaults NSGlobalDomain com.apple.springing.enabled bool true
     
     # Remove delay for spring loading
-    defaults write NSGlobalDomain com.apple.springing.delay -float 0
+    safe_defaults NSGlobalDomain com.apple.springing.delay float 0
     
     # Avoid creating .DS_Store files on network or USB volumes
-    defaults write com.apple.desktopservices DSDontWriteNetworkStores -bool true
-    defaults write com.apple.desktopservices DSDontWriteUSBStores -bool true
+    safe_defaults com.apple.desktopservices DSDontWriteNetworkStores bool true
+    safe_defaults com.apple.desktopservices DSDontWriteUSBStores bool true
     
     ###################
     # Dock Settings
@@ -75,31 +92,31 @@ configure_macos_settings() {
     log "Configuring Dock settings..."
     
     # Enable Dock auto-hide
-    defaults write com.apple.dock autohide -bool true
+    safe_defaults com.apple.dock autohide bool true
     
     # Remove auto-hide delay
-    defaults write com.apple.dock autohide-delay -float 0
+    safe_defaults com.apple.dock autohide-delay float 0
     
     # Make animation faster
-    defaults write com.apple.dock autohide-time-modifier -float 0.5
+    safe_defaults com.apple.dock autohide-time-modifier float 0.5
     
     # Set Dock icon size
-    defaults write com.apple.dock tilesize -int 48
+    safe_defaults com.apple.dock tilesize int 48
     
     # Enable magnification
-    defaults write com.apple.dock magnification -bool true
+    safe_defaults com.apple.dock magnification bool true
     
     # Set magnification size
-    defaults write com.apple.dock largesize -int 64
+    safe_defaults com.apple.dock largesize int 64
     
     # Minimize windows using scale effect
-    defaults write com.apple.dock mineffect -string "scale"
+    safe_defaults com.apple.dock mineffect string "scale"
     
     # Don't show recent applications in Dock
-    defaults write com.apple.dock show-recents -bool false
+    safe_defaults com.apple.dock show-recents bool false
     
     # Show indicator lights for open applications
-    defaults write com.apple.dock show-process-indicators -bool true
+    safe_defaults com.apple.dock show-process-indicators bool true
     
     ###################
     # Screenshots
@@ -110,13 +127,13 @@ configure_macos_settings() {
     mkdir -p "${HOME}/Screenshots"
     
     # Save screenshots to custom folder
-    defaults write com.apple.screencapture location -string "${HOME}/Screenshots"
+    safe_defaults com.apple.screencapture location string "${HOME}/Screenshots"
     
     # Save screenshots in PNG format
-    defaults write com.apple.screencapture type -string "png"
+    safe_defaults com.apple.screencapture type string "png"
     
     # Disable shadow in screenshots
-    defaults write com.apple.screencapture disable-shadow -bool true
+    safe_defaults com.apple.screencapture disable-shadow bool true
     
     ###################
     # General UI/UX
@@ -124,24 +141,24 @@ configure_macos_settings() {
     log "Configuring general UI/UX settings..."
     
     # Expand save panel by default
-    defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode -bool true
-    defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true
+    safe_defaults NSGlobalDomain NSNavPanelExpandedStateForSaveMode bool true
+    safe_defaults NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 bool true
     
     # Expand print panel by default
-    defaults write NSGlobalDomain PMPrintingExpandedStateForPrint -bool true
-    defaults write NSGlobalDomain PMPrintingExpandedStateForPrint2 -bool true
+    safe_defaults NSGlobalDomain PMPrintingExpandedStateForPrint bool true
+    safe_defaults NSGlobalDomain PMPrintingExpandedStateForPrint2 bool true
     
     # Disable the "Are you sure you want to open this application?" dialog
-    defaults write com.apple.LaunchServices LSQuarantine -bool false
+    safe_defaults com.apple.LaunchServices LSQuarantine bool false
     
     # Enable full keyboard access for all controls
-    defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
+    safe_defaults NSGlobalDomain AppleKeyboardUIMode int 3
     
-    # Enable subpixel font rendering on non-Apple LCDs
-    defaults write NSGlobalDomain AppleFontSmoothing -int 2
+    # Enable subpixel font rendering on non-Apple LCDs (may not work on newer macOS)
+    safe_defaults NSGlobalDomain AppleFontSmoothing int 2 || true
     
     # Disable auto-correct
-    defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
+    safe_defaults NSGlobalDomain NSAutomaticSpellingCorrectionEnabled bool false
     
     ###################
     # Restart affected apps

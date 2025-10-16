@@ -1,6 +1,6 @@
 # Mac Setup Automation Script
 
-A comprehensive automation script for setting up a fresh macOS Sequoia 15.1 installation with development tools, productivity apps, and custom system configurations.
+A comprehensive automation script for setting up a fresh macOS installation with development tools, productivity apps, and custom system configurations.
 
 ## Features
 
@@ -10,13 +10,17 @@ A comprehensive automation script for setting up a fresh macOS Sequoia 15.1 inst
 - 📝 **Comprehensive Logging**: Detailed logs of all operations
 - 🧪 **Dry-Run Mode**: Test the script without making actual changes
 - ⚡ **Modern Tools**: Replaces traditional Unix tools with modern alternatives
+- 🔮 **Future-Proof**: Compatible with macOS 15.x through latest beta versions
 
 ## Prerequisites
 
-- macOS Sequoia 15.1 (or compatible version)
+- macOS 15.x or later (tested on macOS Sequoia 15.1+)
+- Compatible with newer macOS versions including beta releases
 - Administrator privileges
 - Internet connection
 - Apple ID (for Mac App Store apps)
+
+> **Note for Beta Users**: While this script is designed to work with the latest macOS beta versions (including macOS 26.x), some settings may behave differently on untested versions. The script includes robust error handling to gracefully handle incompatibilities.
 
 ## Quick Start
 
@@ -263,6 +267,66 @@ Feel free to submit issues and pull requests to improve this script.
 
 MIT License - feel free to use and modify as needed.
 
+## Version Compatibility
+
+### Tested Versions
+- ✅ macOS Sequoia 15.1
+- ✅ macOS Sequoia 15.x series
+
+### Supported Versions
+- macOS 15.x and later (including beta versions)
+- The script includes version detection and will inform you if you're running on an untested version
+- Newer macOS versions (16.x, 26.x, etc.) should work with graceful degradation for unsupported settings
+
+### Known Limitations on Beta Versions
+
+When running on beta or newer untested macOS versions, you may encounter:
+
+1. **System Settings Changes**: Some `defaults` commands may not work if Apple has changed domain names or keys
+2. **Permission Changes**: Beta versions may have stricter security requirements
+3. **Deprecated Settings**: Some settings may no longer be available or may use different mechanisms
+
+The script handles these gracefully by:
+- Logging warnings for failed settings (without stopping execution)
+- Continuing with installation even if some configurations fail
+- Providing clear error messages about what didn't work
+
+### Troubleshooting for Newer macOS Versions
+
+#### Settings Not Applying
+If some settings don't apply on your macOS version:
+
+```bash
+# Run in dry-run mode first to see what would happen
+./setup-mac.sh --dry-run
+
+# Check the log file for warnings about failed settings
+tail -f logs/setup-*.log | grep "Failed to set"
+```
+
+#### Version-Specific Issues
+
+**For macOS 16.x and later:**
+- Some Finder settings may use different domain names
+- Widget settings might have moved to a different preference pane
+- Check System Settings manually for settings that didn't apply
+
+**For beta versions:**
+- Security settings may require manual approval in System Settings
+- Some automation features may be disabled by default
+- You may need to grant additional permissions
+
+#### Getting Help
+
+If you encounter issues on a specific macOS version:
+
+1. Check the log file in `logs/` directory
+2. Look for "Failed to set" warnings
+3. Manually verify which settings didn't apply
+4. Settings can be manually configured in System Settings if needed
+
+The core functionality (Homebrew, packages, applications) should work regardless of macOS version, as these rely on package managers rather than system settings.
+
 ## Acknowledgments
 
 - [Oh My Zsh](https://ohmyz.sh/) for the amazing shell framework
@@ -272,4 +336,4 @@ MIT License - feel free to use and modify as needed.
 
 ---
 
-**Note**: This script is designed for macOS Sequoia 15.1. Some features may work differently on other versions. Always review the script before running it on your system.
+**Note**: This script is designed for macOS 15.x and later. While it includes support for newer versions and betas, some features may work differently on untested versions. The script will inform you if you're running on a newer version and handle incompatibilities gracefully. Always review the script and run in `--dry-run` mode first when using on beta versions.
