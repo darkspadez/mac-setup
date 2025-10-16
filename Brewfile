@@ -61,6 +61,11 @@ cask "rar"
 # Mac App Store CLI
 brew "mas"
 
+# Docker
+brew "docker"
+brew "docker-buildx"
+brew "docker-compose"
+
 # Android Development
 cask "android-commandlinetools"
 
@@ -73,8 +78,7 @@ cask "visual-studio-code@insiders"
 cask "claude"
 cask "raycast"
 cask "1password"
-cask "tailscale"
-cask "docker"
+cask "tailscale-app"
 cask "iina"
 cask "discord"
 cask "the-unarchiver"
@@ -105,10 +109,10 @@ cask "beekeeper-studio"
 cask "datagrip"
 
 # Mac App Store Applications
-mas "Infuse 7", id: 1136220934
-mas "Magnet", id: 441258766
-mas "Unsplash Wallpapers", id: 1284863847
-mas "HP Print and Support", id: 1474276998
-mas "UHF - Love Your IPTV", id: 6443751726
-mas "Amphetamine", id: 937984704
-mas "Paste - Limitless Clipboard", id: 967805235
+#mas "Infuse 7", id: 1136220934
+#mas "Magnet", id: 441258766
+#mas "Unsplash Wallpapers", id: 1284863847
+#mas "HP Print and Support", id: 1474276998
+# mas "UHF - Love Your IPTV", id: 6443751726 # iPadOS App not supported currently via mas-cli
+#mas "Amphetamine", id: 937984704
+#mas "Paste - Limitless Clipboard", id: 967805235
