@@ -1,0 +1,76 @@
+# macOS System Files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Icon must end with two \r
+Icon
+
+# Thumbnails
+._*
+
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Logs
+logs/*.log
+logs/setup-*.log
+*.log
+
+# Backup files
+*.bak
+*.backup
+*.tmp
+*~
+
+# Editor directories and files
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+
+# Test files (if any get created)
+test-*.sh
+*-test.sh
+
+# User-specific configuration
+.env
+.env.local
+config.local
+
+# Homebrew
+Brewfile.lock.json
+
+# Cache directories
+.cache/
+cache/
+
+# Personal notes
+NOTES.md
+TODO.md
+notes/
+
+# Temporary download files
+downloads/
+*.dmg
+*.pkg
+*.zip
+*.tar.gz
