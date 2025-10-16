@@ -66,12 +66,12 @@ install_native_apps() {
     log "Installing native applications..."
     
     # Perplexity Comet Browser - installed manually as it's not in Homebrew
-    if [[ ! -d "/Applications/Perplexity.app" ]]; then
+    if [[ ! -d "/Applications/Comet.app" ]]; then
         log "Downloading Perplexity Comet Browser..."
         if [[ "$DRY_RUN" == false ]]; then
             # Download Perplexity Comet browser for macOS
             # Using the correct URL for Comet browser (not the client)
-            local download_url="https://www.perplexity.ai/rest/browser/download?channel=stable&platform=darwin_universal&mini=1"
+            local download_url="https://www.perplexity.ai/rest/browser/download?channel=stable&platform=mac_arm64"
             curl -L "$download_url" -o /tmp/perplexity-comet.dmg
             
             # Mount the DMG
@@ -79,17 +79,17 @@ install_native_apps() {
             
             # Find the mounted volume (it might vary)
             local volume_path
-            volume_path=$(find /Volumes -maxdepth 1 -name "Perplexity*" -type d | head -n 1)
+            volume_path=$(find /Volumes -maxdepth 1 -name "*Comet*" -o -name "Perplexity*" -type d | head -n 1)
             
             if [[ -n "$volume_path" ]]; then
-                # Copy the app to Applications
-                cp -R "$volume_path/Perplexity.app" /Applications/
+                # Copy the app to Applications (DMG contains Comet.app)
+                cp -R "$volume_path/Comet.app" /Applications/
                 # Unmount the DMG
                 hdiutil detach "$volume_path" -quiet
                 rm /tmp/perplexity-comet.dmg
                 success "Perplexity Comet Browser installed"
             else
-                error "Could not find Perplexity.app in mounted DMG"
+                error "Could not find Comet.app in mounted DMG"
                 rm /tmp/perplexity-comet.dmg
                 return 1
             fi

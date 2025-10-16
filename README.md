@@ -431,9 +431,9 @@ If running on an Intel Mac:
 
 ### Default Browser Not Changing
 ```bash
-# Install and use defaultbrowser tool
-brew install defaultbrowser
-defaultbrowser perplexity
+# Install and use macdefaultbrowser tool
+brew install https://raw.githubusercontent.com/twardoch/macdefaultbrowser/main/macdefaultbrowser.rb --build-from-source
+macdefaultbrowser comet
 ```
 
 ## Logs

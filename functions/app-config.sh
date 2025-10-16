@@ -92,21 +92,21 @@ set_default_apps() {
             return 0
         fi
         
-        # Check if Perplexity is installed
-        if [[ ! -d "/Applications/Perplexity.app" ]]; then
+        # Check if Comet is installed
+        if [[ ! -d "/Applications/Comet.app" ]]; then
             warning "Perplexity Comet not found. Skipping default browser configuration."
             return 1
         fi
         
-        # Install defaultbrowser tool if not present
-        if ! command_exists defaultbrowser; then
-            log "Installing defaultbrowser tool..."
-            brew install defaultbrowser
+        # Install macdefaultbrowser tool if not present
+        if ! command_exists macdefaultbrowser; then
+            log "Installing macdefaultbrowser tool..."
+            brew install https://raw.githubusercontent.com/twardoch/macdefaultbrowser/main/macdefaultbrowser.rb --build-from-source
         fi
         
-        # Set Perplexity as default browser
-        if command_exists defaultbrowser; then
-            defaultbrowser perplexity
+        # Set Comet as default browser
+        if command_exists macdefaultbrowser; then
+            macdefaultbrowser comet
             success "Perplexity Comet set as default browser"
         else
             warning "Could not set default browser. Please set it manually in System Settings."
