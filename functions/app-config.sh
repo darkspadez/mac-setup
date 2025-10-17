@@ -12,7 +12,7 @@ configure_app_replacements() {
         log "Configuring Raycast to replace Spotlight..."
         
         if [[ "$DRY_RUN" == true ]]; then
-            log "[DRY-RUN] Would configure Raycast"
+            log "[DRY-RUN] Would disable Spotlight shortcut"
             return 0
         fi
         
@@ -24,25 +24,22 @@ configure_app_replacements() {
         # Kill SystemUIServer to apply changes
         killall SystemUIServer 2>/dev/null || true
         
-        # Open Raycast to configure it
+        success "Spotlight keyboard shortcut disabled"
+        
+        # Provide instructions for manual Raycast setup
         if [[ -d "/Applications/Raycast.app" ]]; then
-            open -a Raycast
-            
-            # Use AppleScript to try setting up the hotkey
-            osascript << 'EOF' 2>/dev/null || true
-tell application "System Events"
-    delay 2
-    tell application "Raycast" to activate
-end tell
-EOF
-            
-            info "Please set Raycast hotkey to Cmd+Space in Raycast preferences"
-            info "You can also import your Raycast settings if you have them"
+            info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            info "  RAYCAST SETUP REQUIRED"
+            info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            info "  1. Open Raycast (it will launch on first boot)"
+            info "  2. Go through the initial setup process"
+            info "  3. Set the Raycast hotkey to Cmd+Space"
+            info "     (Raycast Settings → General → Raycast Hotkey)"
+            info "  4. Optionally import your Raycast settings if you have them"
+            info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         else
             warning "Raycast not found. Please install it first."
         fi
-        
-        success "Spotlight disabled for Raycast"
     }
     
     # Configure Warp as default terminal
