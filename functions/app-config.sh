@@ -62,7 +62,11 @@ configure_app_replacements() {
             
             # Rebuild Launch Services database
             /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister \
-                -kill -r -domain local -domain system -domain user
+                -r -domain local -domain system -domain user
+            
+            # Restart Finder and Dock to apply Launch Services changes immediately
+            killall Finder 2>/dev/null || true
+            killall Dock 2>/dev/null || true
             
             success "Warp configured as default terminal"
         else
