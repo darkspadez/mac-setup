@@ -86,10 +86,10 @@ set_default_apps() {
     
     # Set Perplexity Comet as default browser
     set_default_browser() {
-        log "Setting Perplexity Comet as default browser..."
+        log "Providing instructions for setting Perplexity Comet as default browser..."
         
         if [[ "$DRY_RUN" == true ]]; then
-            log "[DRY-RUN] Would set Perplexity Comet as default browser"
+            log "[DRY-RUN] Would show instructions for setting Perplexity Comet as default browser"
             return 0
         fi
         
@@ -99,19 +99,26 @@ set_default_apps() {
             return 1
         fi
         
-        # Install macdefaultbrowser tool if not present
-        if ! command_exists macdefaultbrowser; then
-            log "Installing macdefaultbrowser tool..."
-            brew install https://raw.githubusercontent.com/twardoch/macdefaultbrowser/main/macdefaultbrowser.rb --build-from-source
-        fi
+        # Provide instructions for manual browser setup
+        info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        info "  DEFAULT BROWSER SETUP REQUIRED"
+        info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        info "  Due to compatibility issues with automated browser switching"
+        info "  tools, please set Perplexity Comet as your default browser"
+        info "  manually:"
+        info ""
+        info "  1. Open System Settings"
+        info "  2. Navigate to Desktop & Dock"
+        info "  3. Scroll down to 'Default web browser'"
+        info "  4. Select 'Comet' from the dropdown menu"
+        info ""
+        info "  Alternatively, you can:"
+        info "  - Open Comet and it may prompt you to set it as default"
+        info "  - Right-click any HTML file → Get Info → Open with → Comet"
+        info "    Then click 'Change All...'"
+        info "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         
-        # Set Comet as default browser
-        if command_exists macdefaultbrowser; then
-            macdefaultbrowser comet
-            success "Perplexity Comet set as default browser"
-        else
-            warning "Could not set default browser. Please set it manually in System Settings."
-        fi
+        success "Default browser setup instructions provided"
     }
     
     # Set Zed as default text editor
