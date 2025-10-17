@@ -138,7 +138,10 @@ install_native_apps() {
             echo ""
             read -p "Have you downloaded Synergy? (yes/no/skip): " synergy_choice
             
-            case "${synergy_choice,,}" in
+            # Convert to lowercase for case-insensitive matching (bash 3.2 compatible)
+            synergy_choice=$(echo "$synergy_choice" | tr '[:upper:]' '[:lower:]')
+            
+            case "$synergy_choice" in
                 yes|y)
                     # Look for Synergy DMG in Downloads folder
                     local synergy_dmg
