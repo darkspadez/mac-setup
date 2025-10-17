@@ -315,35 +315,33 @@ main() {
 
 # Show post-installation instructions
 show_post_install_instructions() {
-    cat << EOF
-
-${GREEN}Setup Complete!${NC}
-
-${YELLOW}Manual Steps Required:${NC}
-
-1. ${BLUE}Sign in to applications:${NC}
-   - 1Password
-   - Tailscale
-   - Proton Mail & VPN
-   - Discord
-   - Filen
-   - Postman
-
-2. ${BLUE}Configure Raycast:${NC}
-   - Open Raycast preferences
-   - Import your settings/extensions
-   - Verify Cmd+Space hotkey is working
-
-3. ${BLUE}VS Code Insiders Setup:${NC}
-   - Sign in with GitHub for settings sync
-   - Install your preferred extensions
-
-4. ${BLUE}Generate SSH Keys:${NC}
-   ssh-keygen -t ed25519 -C "your.email@example.com"
-
-5. ${BLUE}Restart your Mac${NC} to ensure all settings take effect
-
-EOF
+    echo ""
+    echo -e "${GREEN}Setup Complete!${NC}"
+    echo ""
+    echo -e "${YELLOW}Manual Steps Required:${NC}"
+    echo ""
+    echo -e "1. ${BLUE}Sign in to applications:${NC}"
+    echo "   - 1Password"
+    echo "   - Tailscale"
+    echo "   - Proton Mail & VPN"
+    echo "   - Discord"
+    echo "   - Filen"
+    echo "   - Postman"
+    echo ""
+    echo -e "2. ${BLUE}Configure Raycast:${NC}"
+    echo "   - Open Raycast preferences"
+    echo "   - Import your settings/extensions"
+    echo "   - Verify Cmd+Space hotkey is working"
+    echo ""
+    echo -e "3. ${BLUE}VS Code Insiders Setup:${NC}"
+    echo "   - Sign in with GitHub for settings sync"
+    echo "   - Install your preferred extensions"
+    echo ""
+    echo -e "4. ${BLUE}Generate SSH Keys:${NC}"
+    echo "   ssh-keygen -t ed25519 -C \"your.email@example.com\""
+    echo ""
+    echo -e "5. ${BLUE}Restart your Mac${NC} to ensure all settings take effect"
+    echo ""
 }
 
 # Parse arguments and run main
