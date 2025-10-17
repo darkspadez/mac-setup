@@ -54,11 +54,11 @@ configure_app_replacements() {
         if [[ -d "/Applications/Warp.app" ]]; then
             # Set Warp as default terminal for .command files
             defaults write com.apple.LaunchServices/com.apple.launchservices.secure LSHandlers -array-add \
-                '{"LSHandlerContentType":"public.unix-executable","LSHandlerRoleAll":"dev.warp.Warp-Stable";}'
+                '<dict><key>LSHandlerContentType</key><string>public.unix-executable</string><key>LSHandlerRoleAll</key><string>dev.warp.Warp-Stable</string></dict>'
             
             # Set Warp as default for terminal URLs
             defaults write com.apple.LaunchServices/com.apple.launchservices.secure LSHandlers -array-add \
-                '{"LSHandlerURLScheme":"terminal","LSHandlerRoleAll":"dev.warp.Warp-Stable";}'
+                '<dict><key>LSHandlerURLScheme</key><string>terminal</string><key>LSHandlerRoleAll</key><string>dev.warp.Warp-Stable</string></dict>'
             
             # Rebuild Launch Services database
             /System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister \
