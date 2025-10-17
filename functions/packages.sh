@@ -211,7 +211,7 @@ install_bun_packages() {
         "ccusage"
         "@openai/codex"
         "@google/gemini-cli"
-        "@githubnext/copilot-cli"
+        "@github/copilot"
         "@kilocode/cli@alpha"
     )
     
