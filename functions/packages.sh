@@ -206,10 +206,11 @@ install_bun_packages() {
     
     # Global packages to install
     declare -a bun_packages=(
-        "@cloudflare/claude-code"
+        "@anthropic-ai/claude-code"
+        "@bifrost_inc/superclaude"
+        "ccusage"
         "@openai/codex"
         "@google/gemini-cli"
-        "ccusage"
         "@githubnext/copilot-cli"
         "@kilocode/cli@alpha"
     )
