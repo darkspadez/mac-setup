@@ -219,7 +219,7 @@ EOF
 
 [merge]
     tool = vscode
-    conflictstyle = diff3
+    conflictstyle = zdiff3
 
 [mergetool "vscode"]
     cmd = code-insiders --wait $MERGED
