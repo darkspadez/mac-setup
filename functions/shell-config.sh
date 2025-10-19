@@ -218,17 +218,18 @@ EOF
     default = current
 
 [merge]
-    tool = vscode
+    tool = kaleidoscope
     conflictstyle = zdiff3
 
-[mergetool "vscode"]
-    cmd = code-insiders --wait $MERGED
+[mergetool "kaleidoscope"]
+    cmd = ksdiff --merge --output \"$MERGED\" --relative-path \"$MERGED\" -- \"$LOCAL\" -- \"$BASE\" -- \"$REMOTE\"
+    trustExitCode = true
 
 [diff]
-    tool = vscode
+    tool = kaleidoscope
 
-[difftool "vscode"]
-    cmd = code-insiders --wait --diff $LOCAL $REMOTE
+[difftool "kaleidoscope"]
+    cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 
 [color]
     ui = auto
